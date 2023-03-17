@@ -8,5 +8,5 @@ import java.util.UUID;
 @Service
 public interface UserService {
 
-    UUID signupUser(User user);
+    void signupUser(User user);
 }

@@ -19,7 +19,7 @@ public class UserController {
 
     @PostMapping("/user/signup")
     public ResponseEntity<UUID> signupUser(@RequestBody User user) {
-        UUID userId = userService.signupUser(user);
-        return new ResponseEntity<>(userId, HttpStatus.CREATED);
+        userService.signupUser(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
