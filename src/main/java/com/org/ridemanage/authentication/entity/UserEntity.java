@@ -1,4 +1,4 @@
-package com.org.ridemanage.entity;
+package com.org.ridemanage.authentication.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,8 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @Column(name = "id", nullable = false)
+    private String id;
 
     @Column(name = "username", nullable = false)
     private String username;

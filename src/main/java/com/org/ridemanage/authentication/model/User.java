@@ -1,4 +1,4 @@
-package com.org.ridemanage.model;
+package com.org.ridemanage.authentication.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

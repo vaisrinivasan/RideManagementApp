@@ -1,4 +1,4 @@
-package com.org.ridemanage.exception;
+package com.org.ridemanage.authentication.exception;
 
 public class UserNotCreatedException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package com.org.ridemanage.exception;
+package com.org.ridemanage.profilemanagement.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

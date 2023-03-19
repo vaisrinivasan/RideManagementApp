@@ -1,4 +1,4 @@
-package com.org.ridemanage.service;
+package com.org.ridemanage.authentication.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
