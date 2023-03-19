@@ -1,8 +1,6 @@
 package com.org.ridemanage.profilemanagement.controller;
 
-import com.org.ridemanage.authentication.model.User;
 import com.org.ridemanage.authentication.service.TokenService;
-import com.org.ridemanage.profilemanagement.entity.ProfileEntity;
 import com.org.ridemanage.profilemanagement.model.Profile;
 import com.org.ridemanage.profilemanagement.service.ProfileService;
 import io.jsonwebtoken.Claims;
@@ -16,19 +14,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
-
 @RestController
 public class ProfileController {
 
-    @Autowired
     private ProfileService profileService;
 
-    @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    public ProfileController(ProfileService profileService, TokenService tokenService) {
+        this.profileService = profileService;
+        this.tokenService = tokenService;
+    }
+
     @PostMapping("/profile/create")
-    public ResponseEntity<String> createProfile(@RequestHeader(name = "Authorization") String authorizationHeader){
+    public ResponseEntity<String> createProfile(@RequestHeader(name = "Authorization") String authorizationHeader) {
         Jws<Claims> jwt = tokenService.parseToken(authorizationHeader);
         profileService.createProfile(jwt.getBody().getId());
         return new ResponseEntity<>("Profile created", HttpStatus.OK);
@@ -36,14 +36,14 @@ public class ProfileController {
 
     @PostMapping("/profile/update")
     public ResponseEntity<String> updateProfile(@RequestHeader(name = "Authorization") String authorizationHeader,
-                                                @RequestBody Profile profile){
+                                                @RequestBody Profile profile) {
         Jws<Claims> jwt = tokenService.parseToken(authorizationHeader);
         profileService.updateProfile(jwt.getBody().getId(), profile);
         return new ResponseEntity<>("Profile updated", HttpStatus.OK);
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<Profile> getProfile(@RequestHeader(name = "Authorization") String authorizationHeader){
+    public ResponseEntity<Profile> getProfile(@RequestHeader(name = "Authorization") String authorizationHeader) {
         Jws<Claims> jwt = tokenService.parseToken(authorizationHeader);
         Profile profile = profileService.getProfile(jwt.getBody().getId());
         return new ResponseEntity<>(profile, HttpStatus.OK);

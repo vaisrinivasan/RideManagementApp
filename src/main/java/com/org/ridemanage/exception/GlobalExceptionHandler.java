@@ -1,6 +1,5 @@
 package com.org.ridemanage.exception;
 
-import com.org.ridemanage.authentication.exception.InvalidInputException;
 import com.org.ridemanage.authentication.exception.JwtTokenException;
 import com.org.ridemanage.authentication.exception.UserAlreadyExistsException;
 import com.org.ridemanage.authentication.exception.UserNotCreatedException;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.net.ConnectException;
 
 @ControllerAdvice
 @RestController
@@ -65,5 +66,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleProfileNotFoundException(ProfileNotFoundException exception) {
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+    }
+
+    @ExceptionHandler(value = ConnectException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public ErrorResponse handleConnectException(ConnectException exception) {
+        return new ErrorResponse(HttpStatus.SERVICE_UNAVAILABLE.value(), exception.getMessage());
     }
 }

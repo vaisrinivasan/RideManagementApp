@@ -1,14 +1,13 @@
 package com.org.ridemanage.authentication.service;
 
 import com.google.common.base.Strings;
-import com.org.ridemanage.authentication.entity.UserEntity;
-import com.org.ridemanage.authentication.exception.InvalidInputException;
 import com.org.ridemanage.authentication.exception.UserAlreadyExistsException;
 import com.org.ridemanage.authentication.exception.UserNotCreatedException;
 import com.org.ridemanage.authentication.exception.UserNotRegisteredException;
 import com.org.ridemanage.authentication.model.Credential;
 import com.org.ridemanage.authentication.model.User;
 import com.org.ridemanage.authentication.repository.UserRepository;
+import com.org.ridemanage.exception.InvalidInputException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +16,11 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -38,40 +35,47 @@ public class UserServiceImpl implements UserService{
 
     private static final Pattern pattern = Pattern.compile(emailRegexPattern);
 
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public void signupUser(User user) {
-        if(Strings.isNullOrEmpty(user.getUsername()) || Strings.isNullOrEmpty(user.getPassword()) || Strings.isNullOrEmpty(user.getEmail())) {
-            logger.error("Username, password or email is null or empty");
+        if (Strings.isNullOrEmpty(user.getUsername()) || Strings.isNullOrEmpty(
+                user.getPassword()) || Strings.isNullOrEmpty(user.getEmail())) {
+            logger.error("Username, password or email is null or empty for username " + user.getUsername());
             throw new InvalidInputException("Username, password or email is null or empty");
         }
-        if(!pattern.matcher(user.getEmail()).matches() || user.getPassword().length() < 8) {
-            logger.error("Email format is not correct or Password length is less than 8");
+        if (!pattern.matcher(user.getEmail()).matches() || user.getPassword().length() < 8) {
+            logger.error(
+                    "Email format is not correct or Password length is less than 8 for username " + user.getUsername());
             throw new InvalidInputException("Email format is not correct or Password length is less than 8");
         }
         try {
-            int success = userRepository.createUser(UUID.randomUUID().toString(), user.getUsername(), user.getEmail(), user.getPassword(), Date.valueOf(LocalDate.now()));
+            int success = userRepository.createUser(UUID.randomUUID().toString(), user.getUsername(), user.getEmail(),
+                    user.getPassword(), Date.valueOf(LocalDate.now()));
             if (success <= 0) {
-                logger.error("Error in creating user");
+                logger.error("Error in creating user for username " + user.getUsername());
                 throw new UserNotCreatedException("Error in creating user");
             }
-        }
-        catch(DataIntegrityViolationException exception) {
-            logger.error("Username or email already exists");
+        } catch (DataIntegrityViolationException exception) {
+            logger.error("Username or email already exists for username " + user.getUsername());
             throw new UserAlreadyExistsException("Username or email already exists");
         }
     }
 
     public String getRegisteredUser(Credential credential) {
-        if(Strings.isNullOrEmpty(credential.getUsername()) || Strings.isNullOrEmpty(credential.getPassword())) {
-            logger.error("Username or password is null or empty");
+        if (Strings.isNullOrEmpty(credential.getUsername()) || Strings.isNullOrEmpty(credential.getPassword())) {
+            logger.error("Username or password is null or empty for username " + credential.getUsername());
             throw new InvalidInputException("Username or password is null or empty");
         }
         String userId = userRepository.getUser(credential.getUsername(), credential.getPassword());
-        if(userId == null) {
-            logger.error("User is not registered with the given username and password");
+        if (userId == null) {
+            logger.error(
+                    "User is not registered with the given username and password for username " + credential.getUsername());
             throw new UserNotRegisteredException("User is not registered with the given username and password");
         }
         return userId;

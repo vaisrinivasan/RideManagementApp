@@ -15,7 +15,7 @@ public interface ProfileRepository extends JpaRepository<ProfileEntity, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "insert into profile(id, user_id) values(:id, :user_id)", nativeQuery = true)
+    @Query(value = "insert into profile(id, user_id, updated_date, created_date) values(:id, :user_id, now(), now())", nativeQuery = true)
     int createProfile(@Param("id") String id,
                       @Param("user_id") String userId);
 
@@ -26,7 +26,9 @@ public interface ProfileRepository extends JpaRepository<ProfileEntity, Long> {
             "last_name = coalesce(:last_name, last_name), " +
             "address = coalesce(:address, address)," +
             "date_of_birth = coalesce(:date_of_birth, date_of_birth)," +
-            "country =  coalesce(:country, country)" +
+            "country =  coalesce(:country, country)," +
+            "updated_date = now()," +
+            "created_date = now()" +
             "where user_id = :user_id", nativeQuery = true)
     int updateProfile(@Param("user_id") String userId,
                       @Param("first_name") String firstName,

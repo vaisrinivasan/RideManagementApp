@@ -8,5 +8,6 @@ import org.springframework.stereotype.Service;
 public interface TokenService {
 
     String generateToken(String id);
+
     Jws<Claims> parseToken(String token);
 }

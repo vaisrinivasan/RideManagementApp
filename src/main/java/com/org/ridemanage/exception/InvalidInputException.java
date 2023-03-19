@@ -1,4 +1,4 @@
-package com.org.ridemanage.authentication.exception;
+package com.org.ridemanage.exception;
 
 public class InvalidInputException extends RuntimeException {
 

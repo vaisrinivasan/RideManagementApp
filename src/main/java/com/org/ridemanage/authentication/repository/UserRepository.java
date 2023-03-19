@@ -1,7 +1,6 @@
 package com.org.ridemanage.authentication.repository;
 
 import com.org.ridemanage.authentication.entity.UserEntity;
-import com.org.ridemanage.authentication.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,9 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
@@ -28,6 +24,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query(value = "select u.id from users u where u.username = :username and u.password = crypt(:password, u.password)", nativeQuery = true)
     String getUser(@Param("username") String username,
-                             @Param("password") String password);
+                   @Param("password") String password);
 
 }
