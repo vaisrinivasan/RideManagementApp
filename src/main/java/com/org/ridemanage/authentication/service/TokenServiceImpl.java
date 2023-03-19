@@ -2,6 +2,7 @@ package com.org.ridemanage.authentication.service;
 
 import com.org.ridemanage.authentication.config.TokenProperties;
 import com.org.ridemanage.authentication.exception.InvalidInputException;
+import com.org.ridemanage.authentication.exception.JwtTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -37,7 +38,7 @@ public class TokenServiceImpl implements TokenService{
                     .compact();
             return jwtToken;
         } catch (JwtException jwtException) {
-            throw new InvalidInputException(jwtException);
+            throw new JwtTokenException(jwtException);
         }
     }
 
@@ -52,7 +53,7 @@ public class TokenServiceImpl implements TokenService{
                     .parseClaimsJws(token);
             return jwt;
         } catch (JwtException jwtException) {
-            throw new InvalidInputException(jwtException);
+            throw new JwtTokenException(jwtException);
         }
     }
 }

@@ -1,12 +1,13 @@
-package com.org.ridemanage;
+package com.org.ridemanage.exception;
 
-import com.org.ridemanage.authentication.exception.ErrorResponse;
 import com.org.ridemanage.authentication.exception.InvalidInputException;
+import com.org.ridemanage.authentication.exception.JwtTokenException;
 import com.org.ridemanage.authentication.exception.UserAlreadyExistsException;
 import com.org.ridemanage.authentication.exception.UserNotCreatedException;
 import com.org.ridemanage.authentication.exception.UserNotRegisteredException;
 import com.org.ridemanage.profilemanagement.exception.ProfileAlreadyExistsException;
 import com.org.ridemanage.profilemanagement.exception.ProfileNotCreatedException;
+import com.org.ridemanage.profilemanagement.exception.ProfileNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,13 +45,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = ProfileNotCreatedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public com.org.ridemanage.profilemanagement.exception.ErrorResponse handleProfileNotCreatedException(ProfileNotCreatedException exception) {
-        return new com.org.ridemanage.profilemanagement.exception.ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+    public ErrorResponse handleProfileNotCreatedException(ProfileNotCreatedException exception) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
     }
 
     @ExceptionHandler(value = ProfileAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public com.org.ridemanage.profilemanagement.exception.ErrorResponse handleProfileAlreadyExistsException(ProfileAlreadyExistsException exception) {
-        return new com.org.ridemanage.profilemanagement.exception.ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+    public ErrorResponse handleProfileAlreadyExistsException(ProfileAlreadyExistsException exception) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+    }
+
+    @ExceptionHandler(value = JwtTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleJwtTokenException(JwtTokenException exception) {
+        return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
+    }
+
+    @ExceptionHandler(value = ProfileNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleProfileNotFoundException(ProfileNotFoundException exception) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
     }
 }

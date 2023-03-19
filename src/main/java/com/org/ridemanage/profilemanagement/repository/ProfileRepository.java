@@ -9,19 +9,31 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
-import java.util.UUID;
 
 @Repository
 public interface ProfileRepository extends JpaRepository<ProfileEntity, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "insert into profile(id, user_id, first_name, last_name, address, date_of_birth, country) values(:id, :user_id, :first_name, :last_name, :address, :date_of_birth, :country)", nativeQuery = true)
-    int createProfile(@Param("id") UUID id,
-                      @Param("user_id") String userId,
+    @Query(value = "insert into profile(id, user_id) values(:id, :user_id)", nativeQuery = true)
+    int createProfile(@Param("id") String id,
+                      @Param("user_id") String userId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update profile set " +
+            "first_name = coalesce(:first_name, first_name), " +
+            "last_name = coalesce(:last_name, last_name), " +
+            "address = coalesce(:address, address)," +
+            "date_of_birth = coalesce(:date_of_birth, date_of_birth)," +
+            "country =  coalesce(:country, country)" +
+            "where user_id = :user_id", nativeQuery = true)
+    int updateProfile(@Param("user_id") String userId,
                       @Param("first_name") String firstName,
                       @Param("last_name") String lastName,
                       @Param("address") String address,
                       @Param("date_of_birth") Date dateOfBirth,
                       @Param("country") String country);
+
+    ProfileEntity findByUserId(String userId);
 }
