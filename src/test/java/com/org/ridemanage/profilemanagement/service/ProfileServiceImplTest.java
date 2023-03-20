@@ -38,7 +38,7 @@ public class ProfileServiceImplTest {
         String profileId = UUID.randomUUID().toString();
         String userId = UUID.randomUUID().toString();
         Date date = Date.valueOf(LocalDate.now());
-        ProfileEntity profileEntity = new ProfileEntity(profileId, userId, "abc", "def", "123 Main St", date, "India");
+        ProfileEntity profileEntity = new ProfileEntity(profileId, userId, "abc", "def", "sample st", date, "India");
         when(profileRepository.findByUserId(userId)).thenReturn(profileEntity);
 
         Profile profile = profileService.getProfile(userId);
@@ -46,7 +46,7 @@ public class ProfileServiceImplTest {
         assertEquals(userId, profile.getUserId());
         assertEquals("abc", profile.getFirstName());
         assertEquals("def", profile.getLastName());
-        assertEquals("123 Main St", profile.getAddress());
+        assertEquals("sample st", profile.getAddress());
         assertEquals("India", profile.getCountry());
         assertEquals(date, profile.getDateOfBirth());
     }
