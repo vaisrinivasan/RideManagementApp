@@ -50,7 +50,9 @@ public class ProfileServiceImpl implements ProfileService {
     public void updateProfile(String userId, Profile profile) {
         try {
             int success = profileRepository.updateProfile(userId, profile.getFirstName(), profile.getLastName(),
-                    profile.getAddress(), new Date(profile.getDateOfBirth().getTime()), profile.getCountry());
+                    profile.getAddress(),
+                    profile.getDateOfBirth() != null ? new Date(profile.getDateOfBirth().getTime()) : null,
+                    profile.getCountry());
             if (success <= 0) {
                 logger.error("Error in updating profile");
                 throw new ProfileNotCreatedException("Error in updating profile");

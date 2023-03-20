@@ -22,11 +22,11 @@ public interface ProfileRepository extends JpaRepository<ProfileEntity, Long> {
     @Modifying
     @Transactional
     @Query(value = "update profile set " +
-            "first_name = coalesce(:first_name, first_name), " +
-            "last_name = coalesce(:last_name, last_name), " +
-            "address = coalesce(:address, address)," +
+            "first_name = coalesce(nullif(:first_name, ''), first_name), " +
+            "last_name = coalesce(nullif(:last_name, ''), last_name), " +
+            "address = coalesce(nullif(:address, ''), address)," +
             "date_of_birth = coalesce(:date_of_birth, date_of_birth)," +
-            "country =  coalesce(:country, country)," +
+            "country =  coalesce(nullif(:country, ''), country)," +
             "updated_date = now()," +
             "created_date = now()" +
             "where user_id = :user_id", nativeQuery = true)
